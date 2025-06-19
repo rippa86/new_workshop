@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1: Introduction to HTML</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font (Inter) - Fallback to sans-serif */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col items-center justify-center text-gray-800">
+
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:p-8 flex flex-col items-center">
+
+        <!-- Exercise Banner -->
+        <header class="w-full py-6 mb-8 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-xl rounded-lg text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+                Exercise 1
+            </h1>
+            <p class="mt-2 text-lg md:text-xl font-light opacity-90">Introduction to HTML</p>
+        </header>
+
+        <!-- Exercise Content Area -->
+        <main class="flex-grow w-full max-w-2xl bg-white p-6 rounded-lg shadow-2xl">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-700">Lab Content</h2>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="bg-gray-50 border-l-4 border-blue-500 p-4 rounded-md shadow-sm">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Step 1: Understand Basic Structure</h3>
+                    <p class="text-gray-700">Here's an example of how to start your HTML file:</p>
+                    <pre class="bg-gray-800 text-white p-3 rounded-md text-sm mt-3 overflow-auto"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p&gt;This is my very first paragraph.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    <p class="mt-2 text-gray-700">
+                        Try copying this code into a new file named `index.html` (or `exercise1.html`) and opening it in your browser.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-gray-50 border-l-4 border-green-500 p-4 rounded-md shadow-sm">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800">Step 2: Add More Elements</h3>
+                    <p class="text-gray-700">Now, try adding an image and a list to your page:</p>
+                    <pre class="bg-gray-800 text-white p-3 rounded-md text-sm mt-3 overflow-auto"><code>&lt;!-- Inside your &lt;body&gt; tag --&gt;
+&lt;img src="https://placehold.co/200x100/A0D911/000000?text=Placeholder" alt="A simple placeholder image" class="rounded-md"/&gt;
+&lt;h2&gt;My Favorite Fruits&lt;/h2&gt;
+&lt;ul&gt;
+    &lt;li&gt;Apple&lt;/li&gt;
+    &lt;li&gt;Banana&lt;/li&gt;
+    &lt;li&gt;Cherry&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                    <p class="mt-2 text-gray-700">
+                        Experiment with different tags like `&lt;a&gt;` for links, `&lt;div&gt;` for containers, and `&lt;strong&gt;` for bold text.
+                    </p>
+                </div>
+
+                <!-- Add more steps here -->
+
+            </div>
+            
+            <!-- Back to Labs Button -->
+            <div class="mt-8 text-center">
+                <a href="index.html" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    ← Back to Labs
+                </a>
+            </div>
+        </main>
+
+        <footer class="w-full py-6 mt-8 text-center text-gray-600 text-sm">
+            <p>&copy; 2024 My GitHub Pages Labs. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

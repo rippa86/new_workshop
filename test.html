@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LJWQBHM62Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LJWQBHM62Z');
+  </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Configuring Automation Controller | workshops</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Configuring Automation Controller" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Training Course for Ansible Automation Platform" />
+<meta property="og:description" content="Training Course for Ansible Automation Platform" />
+<link rel="canonical" href="https://labs.demoredhat.com/exercises/ansible_windows/1-controller/" />
+<meta property="og:url" content="https://labs.demoredhat.com/exercises/ansible_windows/1-controller/" />
+<meta property="og:site_name" content="workshops" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Configuring Automation Controller" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Training Course for Ansible Automation Platform","headline":"Configuring Automation Controller","url":"https://labs.demoredhat.com/exercises/ansible_windows/1-controller/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script src="/assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/assets/css/prism-vsc-dark-plus.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=800edaabdf1aae7b0424705d5704d54b0e487885">
+  </head>
+  <body>
+    <script src="/assets/prism.js"></script>
+
+    <div class="wrapper">
+      <header>
+        <div class="header-container">
+          <a href="/">
+            <img
+              class="header-logo"
+              src="/assets/images/redhat-ansible-logo.svg"
+              title="Red Hat Ansible"
+              alt="Red Hat Ansible"
+            />
+          </a>
+          <a class="header-link" href="/">
+             Workshops
+          </a>
+          <a class="header-link" href="https://ansible.github.io/slides">
+            Slide Finder
+          </a>
+          <a class="header-link" href="https://ansible.github.io/slides/ebooks">
+            E-Books
+          </a>
+          <a class="header-link" href="https://ansible.github.io/slides/customer_references">
+            Customer References
+          </a>
+          <a class="header-link" href="https://ansible.github.io/slides/datasheets">
+            Collateral
+          </a>
+          <a class="header-link" href="https://github.com/ansible/workshops/issues/new/choose">
+            Open an Issue
+          </a>
+        </div>
+      </header>
+
+      <section>
+        <h1 id="configuring-automation-controller">Configuring Automation Controller</h1>
+
+<p><strong>Read this in other languages</strong>:
+<br /><img src="/images/uk.png" alt="uk" /> <a href="/exercises/ansible_windows/1-controller/">English</a>,  <img src="/images/japan.png" alt="japan" /><a href="/exercises/ansible_windows/1-controller/README.ja.html">日本語</a>, <img src="/images/fr.png" alt="france" /> <a href="/exercises/ansible_windows/1-controller/README.fr.html">Français</a>.
+<br /></p>
+
+<p>There are a number of constructs in the Automation Controller UI that enable
+multi-tenancy, notifications, scheduling, etc. However, we are only
+going to focus on a few of the key constructs that are required for this
+workshop today.</p>
+
+<ul>
+  <li>
+    <p>Credentials</p>
+  </li>
+  <li>
+    <p>Projects</p>
+  </li>
+  <li>
+    <p>Inventory</p>
+  </li>
+  <li>
+    <p>Job Template</p>
+  </li>
+</ul>
+
+<h2 id="logging-into-controller">Logging into Controller</h2>
+
+<p>Your Automation Controller instance url and credentials were supplied to you on the page created for this workshop.</p>
+
+<p>Your Automation Controller subscription has already been applied for you, so after
+logging in, you should now see the Dashboard.</p>
+
+<h2 id="creating-a-machine-credential">Creating a Machine Credential</h2>
+
+<p>Credentials are utilized by Controller for authentication when launching jobs
+against machines, synchronizing with inventory sources, and importing
+project content from a version control system.</p>
+
+<p>There are many <a href="https://docs.ansible.com/automation-controller/latest/html/userguide/credentials.html#credential-types">types of
+credentials</a>
+including machine, network, and various cloud providers. For this
+workshop, we are using <strong>machine</strong> and <strong>source control</strong> credentials.</p>
+
+<h3 id="step-1">Step 1</h3>
+
+<p>Select CREDENTIALS from the left hand panel under resources</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-credentials.png" alt="Cred" /></p>
+
+<h3 id="step-2">Step 2</h3>
+
+<p>Click the <img src="/exercises/ansible_windows/1-controller/images/add.png" alt="Add" /> icon and add new credential</p>
+
+<h3 id="step-3">Step 3</h3>
+
+<p>Complete the form using the following entries:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>Windows Credential</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Organization</td>
+      <td>Default</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>Machine</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td>student#</td>
+      <td><strong>Replace # with your student number</strong></td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><password></password></td>
+      <td>Replace with your student password</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-add-machine-credential.png" alt="Add Machine Credential" /></p>
+
+<h3 id="step-4">Step 4</h3>
+
+<p>Select SAVE <img src="/exercises/ansible_windows/1-controller/images/at_save.png" alt="Save" /></p>
+
+<h2 id="create-an-scm-credential">Create an SCM Credential</h2>
+
+<p>Our first credential was to access our Windows machines over WinRM. We need another
+to access our source code repository where our automation projects will live. Repeat the process as above, but
+with the following details:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>Git Credential</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>SCM credential for project sync</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Organization</td>
+      <td>Default</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Credential Type</td>
+      <td>Source Control</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td>student#</td>
+      <td>Replace # with your student number</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><password></password></td>
+      <td>Replace with your student password</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Select SAVE <img src="/exercises/ansible_windows/1-controller/images/at_save.png" alt="Save" /></p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-add-scm-credential.png" alt="Add SCM Credential" /></p>
+
+<h2 id="creating-a-project">Creating a Project</h2>
+
+<p>A <strong>Project</strong> is a logical collection of Ansible content, represented in
+Controller. You can manage projects by placing your ansible content into a source code management (SCM) system
+supported by Controller, including Git and Subversion.</p>
+
+<h3 id="step-1-1">Step 1</h3>
+
+<p>In this environment, playbooks are stored in a git repository available on the workshop Gitea instance. Before a <strong>Project</strong> can be created in Automation Controller, the git URL for the repository is needed. In order to obtain the URL of your project, login to the Gitea instance, select your workshop project and copy the <code>https</code> url presented after clicking the “Copy” button.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-gitea-project.png" alt="Proj" />
+<img src="/exercises/ansible_windows/1-controller/images/1-gitea-clone.png" alt="Clone" /></p>
+
+<p>The repo url will be used in <strong>Step 3</strong></p>
+
+<h3 id="step-2-1">Step 2</h3>
+
+<p>Click <strong>Projects</strong> on the left hand panel.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-project.png" alt="Proj" /></p>
+
+<p>Click the <img src="/exercises/ansible_windows/1-controller/images/add.png" alt="Add" /> icon and add new project</p>
+
+<h3 id="step-3-1">Step 3</h3>
+
+<p>Complete the form using the following entries (<strong>using your student
+number in SCM URL</strong>)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>Ansible Workshop Project</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>Windows Workshop Project</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Organization</td>
+      <td>Default</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Default Execution Environment</td>
+      <td>windows workshop execution environment</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SCM Type</td>
+      <td>Git</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SCM URL</td>
+      <td>https://git.<strong>WORKSHOP</strong>.demoredhat.com/<strong>student#</strong>/workshop_project.git</td>
+      <td>URL obtained from Step 1</td>
+    </tr>
+    <tr>
+      <td>SCM BRANCH</td>
+      <td> </td>
+      <td>Intentionally blank</td>
+    </tr>
+    <tr>
+      <td>SCM CREDENTIAL</td>
+      <td>Git Credential</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>OPTIONS</p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Clean</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Delete</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Track submodules</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />Update Revision on Launch</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Allow Branch Override</li>
+</ul>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-create-project.png" alt="Defining a Project" /></p>
+
+<h3 id="step-4-1">Step 4</h3>
+
+<p>Select SAVE <img src="/exercises/ansible_windows/1-controller/images/at_save.png" alt="Save" /></p>
+
+<h3 id="step-5">Step 5</h3>
+
+<p>Scroll down and validate that the project has been successfully synchronized
+against the source control repository upon saving. You should see a green icon displaying “Successful”
+next to the project name in the list view. If the status does not show as “Successful”, try pressing the “Sync Project” button again re-check the status.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-project-success.png" alt="Succesfull Sync" /></p>
+
+<h2 id="inventories">Inventories</h2>
+
+<p>An inventory is a collection of hosts against which jobs may be
+launched. Inventories are divided into groups and these groups contain hosts. Inventories may be sourced manually, by entering host
+names into Controller, or from one of Automation Controller’s supported cloud
+providers or inventory plugins from Certified Content Collections on Automation Hub.</p>
+
+<p>A static Inventory has already been created for you today. Let’s take a look at this inventory and highlight some properties and configuration parameters.</p>
+
+<h3 id="step-1-2">Step 1</h3>
+
+<p>Click <strong>Inventories</strong> from the left hand panel. You will see the
+preconfigured Inventory listed. Click the Inventories’ name <strong>Workshop Inventory</strong> or the Edit button. <img src="/exercises/ansible_windows/1-controller/images/at_edit.png" alt="Edit" /></p>
+
+<h3 id="step-2-2">Step 2</h3>
+
+<p>You are now viewing the Inventory. From here, you can add Hosts,
+Groups, or even Variables specific to this Inventory.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-edit-inventory.png" alt="Edit Inventory" /></p>
+
+<p>We will be viewing the hosts, so click the <strong>HOSTS</strong> button.</p>
+
+<h3 id="step-3-2">Step 3</h3>
+
+<p>In the Hosts view, we can see every host associated with this
+inventory. You will also see which groups a host is associated with.
+Hosts can be associated with multiple groups. These groups can later be used to narrow down the exact hosts we will later run our
+automation on.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-hosts-view.png" alt="Hosts View" /></p>
+
+<h3 id="step-4-2">Step 4</h3>
+
+<p>If you click the <strong>GROUPS</strong> button and then select the <strong>Windows</strong> group, you can inspect variables set at the group level that will apply to all hosts in that group.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-group-edit.png" alt="Group Edit" /></p>
+
+<p>Today, we have already defined a handful of variables to tell Controller how to connect to hosts in this group. You do not have to define these variables as
+a Group variable here, they could also be Host variables or reside
+directly in your Template or Playbook. However, because these variables will be the same for <strong>ALL</strong> windows hosts in our environment, we defined them for the entire windows group.</p>
+
+<p>By default, Ansible will attempt to use SSH to connect to any Host, so
+for Windows we need to tell it utilize a different connection method, in
+this case,
+<a href="https://docs.ansible.com/ansible/latest/user_guide/windows_winrm.html">WinRM</a>.</p>
+
+<p><strong><code>ansible_connection: winrm</code></strong></p>
+
+<p>We also instruct Ansible to connect to the WinRM SSL port 5986 (the
+non-SSL port runs on 5985 but is unencrypted).</p>
+
+<p><strong><code>ansible_port: 5986</code></strong></p>
+
+<p>We also tell Ansible to ignore the WinRM cert, since our lab doesn’t
+have a proper certificate store setup.</p>
+
+<p><strong><code>ansible_winrm_server_cert_validation: ignore</code></strong></p>
+
+<p>Windows also has various authentication methods that we can utilize to
+connect. Here we tell Ansible to use the <strong>CredSSP</strong> Transport Method to
+authenticate to our Windows host:</p>
+
+<p><strong><code>ansible_winrm_transport: credssp</code></strong></p>
+
+<p>If you click the <strong>HOSTS</strong> button, you can view the hosts belonging to the windows group. If you click the link for the host on this page, you can view the host specific variables that have been defined.</p>
+
+<p><img src="/exercises/ansible_windows/1-controller/images/1-controller-host-edit.png" alt="Host Edit" /></p>
+
+<p><strong><code>ansible_host</code></strong></p>
+
+<p>This is the IP address of this particular server</p>
+
+<p><strong><code>ansible_password</code></strong></p>
+
+<p>This is the password needed to connect to this server</p>
+
+<p><strong><code>ansible_user</code></strong></p>
+
+<p>This is the username that Ansible will use along with the password to connect to this server</p>
+
+<p>These variables are very host specific thus have been defined at the host level instead of at the group level.</p>
+
+<p>You can find more information about these and other settings in our
+<a href="https://docs.ansible.com/ansible/latest/user_guide/windows.html">Windows
+Guides</a>.
+The authentication settings are particularly important and you will need
+to review them and decide which method is best for your needs.</p>
+
+<h3 id="automation-mesh">Automation mesh</h3>
+
+<p>
+  <a href="https://www.ansible.com/products/automation-mesh" target="_blank">
+    <img src="/exercises/common/images/mesh_logical.png#centreme" title="Automation mesh" alt="Automation mesh" />
+  </a>
+</p>
+<p><a href="https://www.ansible.com/blog/whats-new-in-ansible-automation-platform-2.1-automation-mesh">Automation mesh</a> is an overlay network intended to ease the distribution of work across a large and dispersed collection of workers. Mesh nodes establish peer-to-peer connections with each other across your existing networks bringing automation closer to the endpoints that need it.</p>
+
+<p>Automation mesh is already configured and ready to use in your workshop environment.</p>
+
+<blockquote>
+  <p><strong>Note</strong></p>
+
+  <p>Learning about automation mesh falls outside the scope of this workshop. 
+However, please try our <a href="https://www.ansible.com/products/ansible-training">hands-on, interactive labs</a> to learn more about automation mesh and other Ansible Automation Platform features.</p>
+</blockquote>
+
+<p><br /><br />
+<a href="/exercises/ansible_windows/">Click here to return to the Ansible for Windows Workshop</a></p>
+
+      </section>
+
+      <footer>
+        <div class="footer-container">
+          <a href="https://redhat.com">
+            <img
+              class="footer-logo"
+              src="/assets/images/redhat-logo.svg"
+              title="Red Hat"
+              alt="Red Hat"
+            />
+          </a>
+          <p class="footer-copyright">Copyright © 2025 Red Hat, Inc.</p>
+          <div class="footer-linkContainer">
+            <a href="https://www.redhat.com/en/about/privacy-policy" class="footer-link">Privacy statement</a>
+            <span class="footer-linkSpacer">|</span>
+            <a href="https://www.redhat.com/en/about/terms-use" class="footer-link">Terms of use</a>
+            <span class="footer-linkSpacer">|</span>
+            <a href="https://www.ansible.com/security?hsLang=en-us" class="footer-link">Security disclosure</a>
+            <span class="footer-linkSpacer">|</span>
+            <a href="https://www.redhat.com/en/about/all-policies-guidelines" class="footer-link">All policies and guidelines</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

@@ -5,4 +5,4 @@ relative_links:
   collections: true
 include:
   - /docs/*
-  - /docs/exercise1.md
+  - docs/exercise1.md

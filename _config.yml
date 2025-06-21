@@ -6,3 +6,4 @@ relative_links:
 include:
   - /docs/*
   - docs/exercise1.md
+  - exercise1.md

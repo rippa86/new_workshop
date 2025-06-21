@@ -77,4 +77,6 @@ To get things started, let's create the following project:
 5.  Click **Save** and your project should start Syncing.
 6.  You’ll see a Green Successful box when it's done successfully.
 
-DONE! You’ve now mastered Setting up Creds and Projects in AAP.
+DONE! You’ve now mastered Setting up Creds and Projects in AAP. [Return home! ](index.md) 
+
+

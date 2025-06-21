@@ -3,4 +3,6 @@ plugins:
 relative_links:
   enabled: true
   collections: true
-#include:
+include:
+  - docs/*
+  - docs/exercise1.md

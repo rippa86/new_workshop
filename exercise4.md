@@ -6,40 +6,112 @@ Lets get this started by creating a super simple Hello world.
 
 ## Step 1: Setting up VSCODE
 
-Because we're using Proper dev ways of working we're going to need to set up Vscode to use our developer branch. To do this:
 
-1. Open and login to your vsCode application from your Workshop machine using the username and password provided
-2. You should have the Workshop Project already set up, so no importing required!
-3. Along the top menu bar select **Terminal** then **New Terminal** A terminal window should pop up along the bottom.
-4. Enter the following commands into the Terminal:
-   ```BASH
-   git config --global user.email "student1@lab.com"
-   git config --global user.name "student1"
-   ```
-5. once created run ``` git pull ``` in the terminal window to pull in your new remote branch called `origin\development`
-6. Once Synced click on the 3 dots **...** to the right of **SOUCE CONTROL** and select **Checkout to**. This will open a small drop down box in the middle of the screen select branch **development**
-7. Awesome! now we're cooking with gas. Lets get on to building our playbook.
-
-## Step 2: Creating Hello World
-
-1. Head back into our repository by clicking on the first button on the left hand side.
-2. click on the icon to create a new file. Call it **hello_world.yml** open the file in your editor.
-3. Lets start by defining our play and telling it which hosts to target.
-4. Add the following into your **hello_world.yml** file
-5. ****REMEMBER**** double space indentation!!!!
-```YAML
+```
 ---
-- name: Running Hello World against our host.
+- name: Installing IIS on a Windows Server
   hosts: windows
   gather_facts: yes
-```
-  * the `---` indicate the start of a YAML file
-  * `- name:` is our human readable label of what we're doing
-  * `hosts:` the hosts we're going to automate against.
-  *  `gather_facts: yes` telling it to get all the delicous facts about our host. [Facts docoo](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html)
-5. Now lets start to add a task to our play:
-```yaml
+  vars:
+    win_features:
+      - "Web-Mgmt-Tools"  
+      - "Web-Asp-Net45"
+    local_users:
+      - name: "iis_admin"
+        description: "Break Glass Account for Administrators"
+        groups: "Administrators" # Add to Administrators group for demo purposes
+        locked: true
+      - name: "iis_general_user"
+        description: "General service account for IIS applications."
+        groups: "Users" # Add to Users group
+        locked: false
+      
   tasks:
-    - name: debugging msg hello world
+
+    - name: Install IIS server utilities
+      ansible.windows.win_feature:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ win_features }}"
+
+    - name: Install required local service accounts
+      ansible.windows.win_user:
+        name: "{{ item.name }}"
+        password: "{{ lookup('ansible.builtin.password', '/tmp/windows_user_password.txt', length=8 chars=['ascii_letters,digits']) }}"
+        description: "{{ item.description }}"
+        groups: "{{ item.groups }}"
+        account_locked: "{{ item.locked }}" #
+        state: present
+      loop: "{{ local_users }}"
+```
+
+```
+---
+- name: Installing IIS on a Windows Server
+  hosts: windows
+  gather_facts: yes
+  vars:
+    iis_port: 8080
+    iis_path: C:\inetpub\wwwroot\index.html 
+  tasks:
+  - block: 
+    - name: Install iis
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: present
+
+    - name: Deploy welcome page from ourwebsite template
+      ansible.windows.win_template:
+        src: templates/index.html.j2 
+        dest: "{{ iis_path }}"
+
+    - name: Create IIS site
+      community.windows.win_iis_website:
+        name: Ansible Playbook Test
+        state: started
+        port: "{{ iis_port }}"
+        physical_path: "{{ iis_path }}"
+      notify: 
+        - "restart iis service"
+
+    - name: Open port for site on the firewall
+      community.windows.win_firewall_rule:
+        name: "iisport{{ iis_port }}"
+        enable: true
+        state: present
+        localport: "{{ iis_port }}"
+        action: Allow
+        direction: In
+        protocol: Tcp
+
+    - name: set a url variable
+      ansible.builtin.set_fact:
+        iis_url: "http://{{ ansible_host }}:{{ iis_port }}"
+
+    - name: Show website address
       ansible.builtin.debug:
-        msg: "Hello world!" 
+        msg: "{{ iis_url }}"
+    
+    - name: test if I can access my site.
+      ansible.windows.win_uri:
+        url: "{{ iis_url }}"
+      register: http_output
+    
+    - name: review HTTP POST
+      ansible.builtin.debug:
+        var: http_output.status_code
+      failed_when: http_output.status_code != 200
+
+    rescue: 
+    - name: Running Handler to restart service
+      debug:
+        msg: "uri failed, running handler"
+      notify: "restart iis service"
+
+  handlers:
+    - name: restart iis service
+      ansible.windows.win_service:
+        name: W3Svc
+        state: restarted
+        start_mode: auto
+```

@@ -81,7 +81,7 @@ Now its time to incorporate this playbook into Ansible Automation Platform. Log 
 5. A new screen will appear. Add the following information:
 | Name | Value |
     | :-------------------------------- | :------------------------------------------- |
-    | Name | hello_world |
+    | Name | dev_hello_world |
     | Inventory | Workshop Inventory |
     | Project | Dev_windows_workshop |
     | playbook | hello_world.yml |
@@ -190,7 +190,7 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
 8. Once sync'd create a Create a new Job template with the follow details:
    | Name | Value |
     | :-------------------------------- | :------------------------------------------- |
-    | Name | Install_IIS |
+    | Name | dev_install_IIS |
     | Inventory | Workshop Inventory |
     | Project | Dev_windows_workshop |
     | playbook | install_iis.yml |
@@ -213,5 +213,14 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
 15. Your new survey will pop open, enter a colour (for example Green) and hit **Next** then press **Launch**
 16. Review your output.
 > You can check out the website from the `TASK [Show website address]` TASK in the Job Out put.
+
+## Step 4: Stopping IIS Service and Removing IIS
+
+Now we have the building blocks to install IIS, now its time to remove it. Purhaps we want to install other Webservices. . . Who knows. So lets create a playbook to remove it. 
+
+1. Using all the details above determine how to do it your self 😃
+> First stop the **W3Svc service** using the **win_service** module, then delete the **Web-Server** service using the **win_feature** module. Optionally, use the **win_file** module to delete the index page.
+2. Add the **dev_remove_iis.yml** as a Job template in AAP Test and see how you go. Ask for Help if needed!!!!
+
     
 DONE! Now you know who to perform the basics of creating a Ansible playbook. Pretty easy :) 🥳  [Return home! ](index.md) 

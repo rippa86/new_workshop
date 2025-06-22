@@ -185,14 +185,15 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
 9. Press **Save**
 10. Lets add a optional Survey for the colour. to this go to the **Survey** Tab and click **Add**
 11. Put in the follow details:
-   | Name | Value |
+    | Name | Value |
     | :-------------------------------- | :------------------------------------------- |
     | Question | Banner Colour |
     | Answer Varible Name | colour |
     | Default Answer | Black |
-12. Click **Save**
-13. Now check your new **colour** survey and toggle the survey to **Enabled**
-14. To launch. click the **details tab**, and click **Launch**
+
+13. Click **Save**
+14. Now check your new **colour** survey and toggle the survey to **Enabled**
+15. To launch. click the **details tab**, and click **Launch**
 > You can also hit the rocket icon
 15. Your new survey will pop open, enter a colour (for example Green) and hit **Next** then press **Launch**
 16. Review your output.

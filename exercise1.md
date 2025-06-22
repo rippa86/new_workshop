@@ -2,7 +2,13 @@
 
 ## Step 1: Setting up Git.
 
-When you open Gitea, you will see a project under the `student1` dashboard. Let's start by following good Git practices and creating a new Branch called `development`.
+We're going to start by learning some Git best practices. In real life, every project should have 3 branches at a minimum. 
+* Feature: What you're building ATM
+* Development: Testing / Bug fixing branch used in Dev AAP
+* Main (Master): used for Production. (This branch should be Protected, requireing a Pull request and require all testing to be completed and documented from Development Branch.
+ 
+In this Lab, we will be using Development and Main (Master). To get things started: Log into Git tea from the workshop panel, using the user name and password. you will see a project under the `student1` dashboard called "workshop_project. click it to open the project repository. 
+Let's start by following good Git practices and creating a new Branch called `development`.
 
 To create this branch, simply:
 1.  Click **Branches** to open the Branches menu.
@@ -11,10 +17,13 @@ To create this branch, simply:
 
 To view the new branch, click the `< > code` tab and select branch `Development`.
 
+Great, we have a new empty project in Git. Pretty simple :)
+
 ## Step 2: Creating Credentials in AAP 
 
-Now that Git is set up, we're going to create 2 new credentials in AAP. One credential is to interact with our host, and another is for AAP itself.
+Now that Git is set up, we're going to create 3 new credentials in AAP. The Credentials are Service accounts we're going to required to authenticate into different parts of our environment. Consisting of: Machine Cred for our Windows Host, AAP Cred for AAP and Source Control for Gitea.
 
+To create these simple do the following: 
 1.  Open and Log into AAP with the information provided in the "Ansible Workshop - Ansible for Windows Automation Access Details" page.
 2.  Under Resources, click **Credentials** and then press **Add**.
 3.  Create a new Credential called `AAP` with the following details:
@@ -44,7 +53,7 @@ Create a new Credential called `Windows_host` with the following details:
 
 Click **Save** to create the new Credential.
 
-Follow the above steps and create another Credential called `GitTEA` with the following details:
+Follow the above steps and create another Credential called `GiTEA` with the following details:
 
 | Name | Value |
 | :------------------ | :----------------- |

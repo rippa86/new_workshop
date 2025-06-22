@@ -20,11 +20,16 @@ Lets get this started by creating a super simple Hello world.
       - name: "iis_admin"
         description: "Break Glass Account for Administrators"
         groups: "Administrators" # Add to Administrators group for demo purposes
-        locked: true
       - name: "iis_general_user"
         description: "General service account for IIS applications."
         groups: "Users" # Add to Users group
-        locked: false
+    logon_message_caption: "Welcome to Our Lab Environment"
+    logon_message_text: |
+      This server is part of the Ansible 101 Lab.
+      Unauthorized access is strictly prohibited.
+      All activities may be monitored.
+      If you are not an authorized user, disconnect immediately.
+
       
   tasks:
 
@@ -37,12 +42,29 @@ Lets get this started by creating a super simple Hello world.
     - name: Install required local service accounts
       ansible.windows.win_user:
         name: "{{ item.name }}"
-        password: "{{ lookup('ansible.builtin.password', '/tmp/windows_user_password.txt', length=8 chars=['ascii_letters,digits']) }}"
         description: "{{ item.description }}"
         groups: "{{ item.groups }}"
-        account_locked: "{{ item.locked }}" #
         state: present
       loop: "{{ local_users }}"
+
+    - name: Set the Legal Notice Caption
+      # The win_regedit module is used to manage Windows Registry keys.
+
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: LegalNoticeCaption
+        data: "{{ logon_message_caption }}"
+        type: string # Ensure the data type is string (REG_SZ)
+        state: present # Ensure the key-value pair exists
+
+    - name: Set the Legal Notice Text
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        name: LegalNoticeText
+        data: "{{ logon_message_text }}"
+        type: string # Ensure the data type is string (REG_SZ)
+        state: present # Ensure the key-value pair exists
+
 ```
 
 ```

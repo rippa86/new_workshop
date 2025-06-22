@@ -145,10 +145,12 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
 
 5. For tasks where going to add the following Modules: here is the documentation up front.
 - [win_template](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_template_module.html) - dumps a template from the remote server
-- [win_feature]() - Where using this to install the iis web server
-- [win_service]() - to start the webservice
+- [win_feature](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_feature_module.html) - Where using this to install the iis web server
+- [win_service](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_service_module.html) - to start the webservice
+- [win_uri](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_uri_module.html) - Web request module.
+- [set_fact](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html) - Setting a ansible fact (a variable) 
 - Debug to print the URL
-- Win_ping to test if its working.
+
 ```yml
   tasks:
   - name: Install iis
@@ -166,9 +168,22 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
       name: W3Svc
       state: started
 
+  - name: set a url variable
+    ansible.builtin.set_fact:
+      iis_url: "http://{{ ansible_host }}"
+
   - name: Show website address
     ansible.builtin.debug:
-      msg: "http://{{ ansible_host }}"
+      msg: "{{ iis_url }}"
+  
+  - name: test if I can access my site.
+    ansible.windows.win_uri:
+      url: "{{ iis_url }}"
+    register: http_output
+  
+  - name: review HTTP POST
+    ansible.builtin.debug:
+      var: http_output.status_code 
 ```
 6. Save you new playbook, and commit and push the code to Gitea as we've done previously.
 7. Its time to create a new job template! Resync our **DEV_windows_workshop** from the **Projects** menu and clicking **Sync Project**

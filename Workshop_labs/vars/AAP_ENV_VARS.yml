@@ -1,0 +1,70 @@
+controller_projects:
+  - name: "DEV_windows_workshop"
+    organization: Default
+    scm_branch: main
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'yes'
+    scm_url: https://gitlab.2bpzd.sandbox3037.opentlc.com/student1/workshop_project.git
+    credential: git
+    update_project: yes
+    scm_branch: "development"
+  - name: "PRD_windows_workshop"
+    organization: Default
+    scm_branch: master
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'yes'
+    scm_url: https://gitlab.2bpzd.sandbox3037.opentlc.com/student1/workshop_project.git
+    credential: git
+    update_project: yes
+    scm_branch: "development"
+controller_templates:
+  - name: "{{ env }}_install_iis"
+    job_type: run
+    inventory: Workshop Inventory
+    execution_environment: Default execution environment
+    survey_enabled: false
+    project: "{{ env }}_windows_workshop"
+    playbook: "install_iis.yml"
+    extra_vars: 
+      colour: Black
+      your_name: David
+    credentials:
+    - Windows_host
+  - name: "{{ env }}_Hello World"
+    job_type: run
+    inventory: Workshop Inventory
+    execution_environment: Default execution environment
+    survey_enabled: false
+    project: "{{ env }}_windows_workshop"
+    playbook: "hello_world.yml"
+    credentials:
+    - Windows_host
+  - name: "{{ env }}_install_developer_tools"
+    job_type: run
+    inventory: Workshop Inventory
+    execution_environment: Default execution environment
+    survey_enabled: false
+    project: "{{ env }}_windows_workshop"
+    playbook: "iis_developer_platform.yml"
+    extra_vars:
+      add_users: yes
+    credentials:
+    - Windows_host
+  - name: "{{ env }}_install_iis_extra"
+    job_type: run
+    inventory: Workshop Inventory
+    execution_environment: Default execution environment
+    survey_enabled: false
+    project: "{{ env }}_windows_workshop"
+    playbook: "install_iis_extra.yml"
+    extra_vars: 
+      colour: Black
+      your_name: David
+    credentials:
+    - Windows_host
+
+

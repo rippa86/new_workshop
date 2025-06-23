@@ -1,0 +1,16 @@
+---
+- name: Playbook to configure ansible controller post installation
+  hosts: localhost
+  connection: local
+  vars:
+    env: DEV
+    scm_update: yes
+    branch: development
+
+  pre_tasks:
+    - name: Include vars from controller_configs directory
+      ansible.builtin.include_vars: 
+        file: AAP_ENV_VARS.yml
+
+  roles:
+    - infra.controller_configuration.dispatch

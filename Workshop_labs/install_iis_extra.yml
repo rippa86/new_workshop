@@ -1,0 +1,78 @@
+---
+- name: Installing IIS on a Windows Server
+  hosts: windows
+  gather_facts: yes
+  vars:
+    iis_port: 8080
+    iis_path: C:\sites\awesomewebsite\
+  tasks:
+  - block: 
+    - name: Install iis
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: present
+
+    - name: Create site directory structure
+      ansible.windows.win_file:
+        path: "{{ iis_path }}"
+        state: directory
+
+    - name: Deploy welcome page from ourwebsite template
+      ansible.windows.win_template:
+        src: templates/index.html.j2 
+        dest: "{{ iis_path }}/index.html"
+
+    - name: Create IIS site
+      community.windows.win_iis_website:
+        name: Ansible Playbook Test
+        state: started
+        port: "{{ iis_port }}"
+        physical_path: "{{ iis_path }}"
+      notify: 
+        - "restart iis service"
+
+    - name: Open port for site on the firewall
+      community.windows.win_firewall_rule:
+        name: "iisport{{ iis_port }}"
+        enable: true
+        state: present
+        localport: "{{ iis_port }}"
+        action: Allow
+        direction: In
+        protocol: Tcp
+
+    - name: set a url variable
+      ansible.builtin.set_fact:
+        iis_url: "http://{{ ansible_host }}:{{ iis_port }}"
+
+    - name: Show website address
+      ansible.builtin.debug:
+        msg: "{{ iis_url }}"
+    
+    - name: test if I can access my site.
+      ansible.windows.win_uri:
+        url: "{{ iis_url }}"
+      register: http_output
+    
+    - name: review HTTP POST
+      ansible.builtin.debug:
+        var: http_output.status_code
+      failed_when: http_output.status_code != 200
+
+    rescue: 
+    - name: Running Handler to restart service
+      debug:
+        msg: "somthing failed, running handler"
+
+    - name: restart iis service
+      ansible.windows.win_service:
+        name: W3Svc
+        state: restarted
+        start_mode: auto
+
+  handlers:
+    - name: restart iis service
+      ansible.windows.win_service:
+        name: W3Svc
+        state: restarted
+        start_mode: auto

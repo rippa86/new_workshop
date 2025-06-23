@@ -1,0 +1,12 @@
+- name: Running Hello World against our host.
+  hosts: windows
+  gather_facts: yes
+  
+  tasks:
+    - name: debugging msg hello world
+      ansible.builtin.debug:
+        msg: "Hello world!" 
+
+    - name: debugging var ansible_os_name
+      ansible.builtin.debug:
+        var: ansible_os_name

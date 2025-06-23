@@ -196,4 +196,4 @@ The Developers are now asking if we can create a playbook that gives them more f
         start_mode: auto
   ```
 
-Done! 
+DONE! you now wield the power to do great things in Ansible 🎊. Don't create these in AAP! We'll do it later 🤞 [Home!](index.md)

@@ -70,7 +70,7 @@ Now we're going to start to build a playbook to install a couple of local users 
         loop: "{{ win_features }}"
   ```
 4. Next we're going to install a couple of local accounts using [win_user](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_user_module.html) to this server for the purpose of this Lab. Ansible does have dedicated collection for Active Directory. 
-     ```
+     ```yml
     - name: Install required local service accounts
       ansible.windows.win_user:
         name: "{{ item.name }}"
@@ -84,7 +84,7 @@ Now we're going to start to build a playbook to install a couple of local users 
 5. To update the banner in Windows you're required to update the Policies in your registry. to date we're going to take advantage of the win_regedit module.
 
   > Making use of the win_regedit and the win_dsc modules are excellent tools to help enable configuration as code on Windows Systems. Together with Event Driven Ansible it will help you keep a constant configuration of Windows and instantly remediate if some one changes configuration they're not meant to. 
-  ```
+  ```yml
     - name: Set the Legal Notice Caption
       ansible.windows.win_regedit:
         path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
@@ -107,31 +107,34 @@ Now we're going to start to build a playbook to install a couple of local users 
 
 The Developers are now asking if we can create a playbook that gives them more funtionality, supporting different ports and installing directories. To do this we're going to create a new playbook.
 
-1. Create a new playbook called **install_iis_extra.yml** and to start add in the following. You'll notice that we're wrapping the text under a block statement and adding a number of variables at the beginning of the play. 
-  ```
-  ---
-  - name: Installing IIS on a Windows Server
-    hosts: windows
-    gather_facts: yes
-    vars:
-      iis_port: 8080
-      iis_path: C:\inetpub\wwwroot\index.html 
-    tasks:
-    - block: 
-      - name: Install iis
-        ansible.windows.win_feature:
-          name: Web-Server
-          state: present
-        notify: 
-          - "restart iis service"
-  
-      - name: Deploy welcome page from ourwebsite template
-        ansible.windows.win_template:
-          src: templates/index.html.j2 
-          dest: "{{ iis_path }}"
+1. Create a new playbook called **install_iis_extra.yml** and to start add in the following. You'll notice that we're wrapping the text under a block statement, using the [win_file](https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_file_module.html) to create a directory and adding a number of variables at the beginning of the play. 
+  ```yml
+---
+- name: Installing IIS on a Windows Server
+  hosts: windows
+  gather_facts: yes
+  vars:
+    iis_port: 8080
+    iis_path: C:\sites\awesomewebsite\
+  tasks:
+  - block: 
+    - name: Install iis
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: present
+
+    - name: Create site directory structure
+      ansible.windows.win_file:
+        path: "{{ iis_path }}"
+        state: directory
+
+    - name: Deploy welcome page from ourwebsite template
+      ansible.windows.win_template:
+        src: templates/index.html.j2 
+        dest: "{{ iis_path }}/index.html"
   ```
 2. Now that created its time to utilise our first community module. **[community.windows.win_iis_website](https://docs.ansible.com/ansible/latest/collections/community/windows/win_iis_website_module.html)** This will give us the functionality to change the default path and add a custom port. If this has been "Changed" we will call the handler "restart iis service"
-   ```
+   ```yml
     - name: Create IIS site
       community.windows.win_iis_website:
         name: Ansible Playbook Test
@@ -142,7 +145,7 @@ The Developers are now asking if we can create a playbook that gives them more f
         - "restart iis service"
    ```
 3. Because port 8080 isn't a default port for Webtraffic on Windows, we're going to have to punch a hole through that firewall! once again we're making use of the community module [win_firewall_rule](https://docs.ansible.com/ansible/latest/collections/community/windows/win_firewall_rule_module.html). add in the following plus the remaining tasks we've covered before. 
-   ```
+   ```yml
     - name: Open port for site on the firewall
       community.windows.win_firewall_rule:
         name: "iisport{{ iis_port }}"
@@ -172,7 +175,7 @@ The Developers are now asking if we can create a playbook that gives them more f
       failed_when: http_output.status_code != 200
    ```
 4. To finish off our block we're going to add the following rescue statement. How will it work? Because we've added a failed_when: conditional in our review HTTP POST, if we don't get a return code of 200, the playbook will trigger a failure. You can test out this use case if you disable the web service.
-   ```
+   ```yml
     rescue: 
     - name: Running Handler to restart service
       debug:
@@ -184,7 +187,7 @@ The Developers are now asking if we can create a playbook that gives them more f
         start_mode: auto
    ```
 5. Now to finish off our playbook we're including the handler mentioned in step 2. this simply restarts IIS if we made a change above. 
-  ```  
+  ```yml
   handlers:
     - name: restart iis service
       ansible.windows.win_service:

@@ -67,8 +67,9 @@ In todays lab, we will be focusing on Projects and Job Templates. So lets get st
     | Answer type | Multiple choice (Single select) |
     | Multiple Choice Options| DEV (Push enter) PRD, select the tick to make DEV default | 
   click **Save**
-10. Enable the survey back clicking the toggle and launch the job template
-11. If you click on **Projects** you will notice that we have created a PRD version of windows_workshop and if you click on **Templates** you'll see the two templates we created last exersise. Give them a run and see how they work :)
+
+11. Enable the survey back clicking the toggle and launch the job template
+12. If you click on **Projects** you will notice that we have created a PRD version of windows_workshop and if you click on **Templates** you'll see the two templates we created last exersise. Give them a run and see how they work :)
     * If you run this against Prod. Nothing will happen, we there is nothing in that Main (Master) branch.
 
 

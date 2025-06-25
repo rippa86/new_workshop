@@ -160,7 +160,7 @@ Now its time to set up the playbook we've all been waiting for Installing IIS to
 
   - name: Deploy welcome page from ourwebsite template
     ansible.windows.win_template:
-      src: /path/to/your/template/index.html.j2 
+      src: templates/index.html.j2 
       dest: C:\inetpub\wwwroot\index.html   
 
   - name: Start iis service

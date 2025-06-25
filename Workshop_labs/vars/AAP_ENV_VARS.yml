@@ -1,7 +1,7 @@
 controller_projects:
   - name: "DEV_windows_workshop"
     organization: Default
-    scm_branch: main
+    scm_branch: master
     scm_clean: 'no'
     scm_delete_on_update: 'no'
     scm_type: git
@@ -9,10 +9,8 @@ controller_projects:
     scm_url: https://gitlab.2bpzd.sandbox3037.opentlc.com/student1/workshop_project.git
     credential: git
     update_project: yes
-    scm_branch: "development"
   - name: "PRD_windows_workshop"
     organization: Default
-    scm_branch: master
     scm_clean: 'no'
     scm_delete_on_update: 'no'
     scm_type: git

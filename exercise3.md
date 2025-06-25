@@ -93,7 +93,7 @@ Now its time to incorporate this playbook into Ansible Automation Platform. Log 
 # Step 4. Installing IIS. 
 Now its time to set up the playbook we've all been waiting for Installing IIS to get started we're going to create a website template, install IIS, enable the service and of course test. . . 
 
-1. Lets get back into our repository and create a new folder called **templates**. once created, we're going to create a new jinja template called **`website_template.html.j2`**
+1. Lets get back into our repository and create a new folder called **templates**. once created, we're going to create a new jinja template called **`index.html.j2`**
 2. Copy the following contents into the file. Notice that we have to variables in the file called `your_name` and `colour'.
 ```html
 <!DOCTYPE html>

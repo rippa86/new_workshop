@@ -6,7 +6,7 @@ controller_projects:
     scm_delete_on_update: 'no'
     scm_type: git
     scm_update_on_launch: 'yes'
-    scm_url: https://gitlab.2bpzd.sandbox3037.opentlc.com/student1/workshop_project.git
+    scm_url: "{{ scm_url }}"
     credential: git
     update_project: yes
   - name: "PRD_windows_workshop"
@@ -15,7 +15,7 @@ controller_projects:
     scm_delete_on_update: 'no'
     scm_type: git
     scm_update_on_launch: 'yes'
-    scm_url: https://gitlab.2bpzd.sandbox3037.opentlc.com/student1/workshop_project.git
+    scm_url: "{{ scm_url }}"
     credential: git
     update_project: yes
     scm_branch: "master"

@@ -28,7 +28,7 @@ In todays lab, we will be focusing on Projects and Job Templates. So lets get st
     - name: infra.controller_configuration
    ```
 2. Once saved we're now going to create a list of vars which will create the skeleton of our role. create a new folder called **vars** and a new file under it called **AAP_ENV_VARS.yml**
-3. Paste in the following variables from this file: [AAP_ENV_VARS.yml](https://github.com/rippa86/new_workshop/blob/main/Workshop_labs/vars/AAP_ENV_VARS.yml)
+3. Paste in the following variables from this file: [AAP_ENV_VARS.yml](https://github.com/rippa86/new_workshop/blob/main/vars/AAP_ENV_VARS.yml)
 4. Now thats complete we're going to create a new playbook to build our environment. To do this create a new file in the root file system called **setup.yml**
 5. paste in the following content:
    ```yml

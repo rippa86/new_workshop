@@ -53,7 +53,7 @@ Create a new Credential called `Windows_host` with the following details:
 
 Click **Save** to create the new Credential.
 
-Follow the above steps and create another Credential called `GiTEA` with the following details:
+Follow the above steps and create another Credential called `git` with the following details:
 
 | Name | Value |
 | :------------------ | :----------------- |

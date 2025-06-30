@@ -1,0 +1,38 @@
+---
+- name: Installing IIS on a Windows Server
+  hosts: windows
+  gather_facts: yes
+
+  tasks:
+  - name: Start iis service
+    ansible.windows.win_service:
+      name: W3Svc
+      state: stopped
+
+  - name: Install iis
+    ansible.windows.win_feature:
+      name: Web-Server
+      state: absent
+
+  - name: Deploy welcome page from ourwebsite template
+    ansible.windows.win_file:
+      path: "{{ template_dest }}{{ html_file_name }}"
+      state: absent
+
+  - name: set a url variable
+    ansible.builtin.set_fact:
+      iis_url: "http://{{ ansible_host }}"
+
+  - name: Show website address
+    ansible.builtin.debug:
+      msg: "{{ iis_url }}"
+
+  - name: test if I can access my site.
+    ansible.windows.win_uri:
+      url: "{{ iis_url }}"
+    register: http_output
+    ignore_errors: true
+
+  - name: review HTTP POST
+    ansible.builtin.debug:
+      var: http_output.status_code

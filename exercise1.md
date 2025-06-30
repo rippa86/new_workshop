@@ -57,7 +57,7 @@ Follow the above steps and create another Credential called `GiTEA` with the fol
 
 | Name | Value |
 | :------------------ | :----------------- |
-| Name | GitTEa |
+| Name | git |
 | Organisation | Default |
 | Credential type | Source Control |
 | Username | Student1 |
